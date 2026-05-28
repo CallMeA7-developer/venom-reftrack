@@ -41,6 +41,13 @@ export const translations = {
         deleteConfirm: 'Are you sure you want to delete this customer?',
         deleteFailed: 'Failed to delete customer',
         deleteSuccess: 'Customer deleted!',
+        edit: 'Edit',
+        editFailed: 'Failed to update customer',
+        editSuccess: 'Customer updated!',
+        editForm: {
+          title: 'Edit Customer',
+          save: 'Save Changes',
+        },
         addForm: {
           title: 'Add New Customer',
           namePlaceholder: 'Full name',
@@ -122,6 +129,13 @@ export const translations = {
         deleteConfirm: 'هل أنت متأكد أنك تريد حذف هذا العميل؟',
         deleteFailed: 'فشل حذف العميل',
         deleteSuccess: 'تم حذف العميل!',
+        edit: 'تعديل',
+        editFailed: 'فشل تحديث العميل',
+        editSuccess: 'تم تحديث العميل!',
+        editForm: {
+          title: 'تعديل العميل',
+          save: 'حفظ التغييرات',
+        },
         addForm: {
           title: 'إضافة عميل جديد',
           namePlaceholder: 'الاسم الكامل',

@@ -24,6 +24,11 @@ export default function CustomersTab() {
   const [formPhone, setFormPhone] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [showEditForm, setShowEditForm] = useState(false)
+  const [editCustomer, setEditCustomer] = useState<Customer | null>(null)
+  const [editName, setEditName] = useState('')
+  const [editPhone, setEditPhone] = useState('')
+  const [updating, setUpdating] = useState(false)
 
   useEffect(() => { fetchCustomers() }, [])
 
@@ -43,6 +48,31 @@ export default function CustomersTab() {
   const filtered = customers.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase())
   )
+
+  function handleEditOpen(c: Customer) {
+    setEditCustomer(c)
+    setEditName(c.name)
+    setEditPhone(c.phone || '')
+    setShowEditForm(true)
+  }
+
+  async function handleEditSave(e: React.FormEvent) {
+    e.preventDefault()
+    if (!editCustomer) return
+    setUpdating(true)
+    const { error } = await supabase
+      .from('customers')
+      .update({ name: editName.trim(), phone: editPhone.trim() })
+      .eq('id', editCustomer.id)
+    setUpdating(false)
+    if (error) {
+      toast.error(ct.editFailed)
+    } else {
+      toast.success(ct.editSuccess)
+      setShowEditForm(false)
+      fetchCustomers()
+    }
+  }
 
   async function handleDelete(id: string) {
     if (!confirm(ct.deleteConfirm)) return
@@ -174,6 +204,66 @@ export default function CustomersTab() {
         </div>
       )}
 
+      {/* Edit Form Modal */}
+      {showEditForm && editCustomer && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md">
+            <div className="flex items-center justify-between px-6 py-4 border-b">
+              <h3 className="font-semibold text-gray-900">{ct.editForm.title}</h3>
+              <button onClick={() => setShowEditForm(false)} className="text-gray-400 hover:text-gray-600">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <form onSubmit={handleEditSave} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{ct.name}</label>
+                <input
+                  type="text"
+                  required
+                  value={editName}
+                  onChange={e => setEditName(e.target.value)}
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1D9E75] text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{ct.phone}</label>
+                <input
+                  type="tel"
+                  value={editPhone}
+                  onChange={e => setEditPhone(e.target.value)}
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1D9E75] text-sm"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowEditForm(false)}
+                  className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  {ct.addForm.cancel}
+                </button>
+                <button
+                  type="submit"
+                  disabled={updating}
+                  className="flex-1 bg-[#1D9E75] hover:bg-[#17845F] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-60"
+                >
+                  {updating ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                    </span>
+                  ) : ct.editForm.save}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Table */}
       {error ? (
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
@@ -223,6 +313,17 @@ export default function CustomersTab() {
                       {new Date(c.created_at).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-3">
+                      <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handleEditOpen(c)}
+                        className="flex items-center gap-1.5 text-xs font-medium text-blue-500 hover:text-blue-700 hover:bg-blue-50 px-2.5 py-1.5 rounded-lg transition-colors"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        {ct.edit}
+                      </button>
                       <button
                         onClick={() => handleDelete(c.id)}
                         disabled={deleting === c.id}
@@ -241,6 +342,7 @@ export default function CustomersTab() {
                         )}
                         {ct.delete}
                       </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
