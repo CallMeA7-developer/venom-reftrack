@@ -15,6 +15,7 @@ export default function DashboardPage() {
   const { t, isRTL } = useLang()
   const [activeTab, setActiveTab] = useState(0)
   const [authChecked, setAuthChecked] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!isLoggedIn()) {
@@ -22,13 +23,17 @@ export default function DashboardPage() {
     } else {
       setAuthChecked(true)
     }
+    setLoading(false)
   }, [router])
 
-  if (!authChecked) return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="animate-spin w-8 h-8 border-4 border-[#1D9E75] border-t-transparent rounded-full" />
+  if (loading) return (
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4">
+      <div className="animate-spin w-10 h-10 border-4 border-[#1D9E75] border-t-transparent rounded-full" />
+      <p className="text-sm text-gray-400">Loading...</p>
     </div>
   )
+
+  if (!authChecked) return null
 
   const handleLogout = () => {
     logout()
