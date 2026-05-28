@@ -204,6 +204,15 @@ export default function CustomersTab() {
         </div>
       )}
 
+      {/* Summary bar */}
+      {!error && !loading && (
+        <div className="flex items-center justify-between px-1">
+          <p className="text-sm text-gray-500">
+            {ct.showing} <span className="font-medium text-gray-900">{filtered.length}</span> {ct.of} <span className="font-medium text-gray-900">{customers.length}</span> {ct.customers}
+          </p>
+        </div>
+      )}
+
       {/* Edit Form Modal */}
       {showEditForm && editCustomer && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
