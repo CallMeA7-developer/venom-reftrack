@@ -25,6 +25,7 @@ export const translations = {
         noActivity: 'No recent activity',
         refresh: 'Refresh',
         viewAll: 'View All',
+        fetchError: 'Failed to load data. Please try again.',
       },
       customers: {
         search: 'Search customers...',
@@ -99,6 +100,7 @@ export const translations = {
         noActivity: 'لا يوجد نشاط حديث',
         refresh: 'تحديث',
         viewAll: 'عرض الكل',
+        fetchError: 'فشل تحميل البيانات. يرجى المحاولة مرة أخرى.',
       },
       customers: {
         search: 'البحث عن عملاء...',

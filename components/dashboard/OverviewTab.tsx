@@ -15,6 +15,7 @@ export default function OverviewTab({ onViewAll }: { onViewAll?: () => void }) {
   const [topReferrers, setTopReferrers] = useState<ReferrerStat[]>([])
   const [recentActivity, setRecentActivity] = useState<ReferralVisit[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchData()
@@ -22,10 +23,17 @@ export default function OverviewTab({ onViewAll }: { onViewAll?: () => void }) {
 
   async function fetchData() {
     setLoading(true)
+    setError(null)
     const [custRes, visitsRes] = await Promise.all([
       supabase.from('customers').select('*'),
       supabase.from('visits').select('*, customers(name)').order('created_at', { ascending: false }),
     ])
+
+    if (custRes.error || visitsRes.error) {
+      setError(ov.fetchError)
+      setLoading(false)
+      return
+    }
 
     const customers: Customer[] = custRes.data || []
     const visits: ReferralVisit[] = visitsRes.data || []
@@ -56,6 +64,24 @@ export default function OverviewTab({ onViewAll }: { onViewAll?: () => void }) {
     { label: ov.totalReferrals, value: totalReferrals, icon: '🔗', color: 'bg-purple-50 text-purple-600' },
     { label: ov.confirmedVisits, value: confirmedVisits, icon: '✅', color: 'bg-green-50 text-[#1D9E75]' },
   ]
+
+  if (error) return (
+    <div className="flex flex-col items-center justify-center py-20 gap-4">
+      <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
+        <svg className="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <p className="text-sm text-gray-500">{error}</p>
+      <button
+        onClick={fetchData}
+        className="px-4 py-2 bg-[#1D9E75] hover:bg-[#17845F] text-white text-sm font-medium rounded-lg transition-colors"
+      >
+        {ov.refresh}
+      </button>
+    </div>
+  )
 
   if (loading) return <LoadingSkeleton />
 
