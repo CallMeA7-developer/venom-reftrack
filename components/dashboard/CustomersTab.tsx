@@ -23,6 +23,7 @@ export default function CustomersTab() {
   const [formName, setFormName] = useState('')
   const [formPhone, setFormPhone] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [deleting, setDeleting] = useState<string | null>(null)
 
   useEffect(() => { fetchCustomers() }, [])
 
@@ -42,6 +43,19 @@ export default function CustomersTab() {
   const filtered = customers.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase())
   )
+
+  async function handleDelete(id: string) {
+    if (!confirm(ct.deleteConfirm)) return
+    setDeleting(id)
+    const { error } = await supabase.from('customers').delete().eq('id', id)
+    setDeleting(null)
+    if (error) {
+      toast.error(ct.deleteFailed)
+    } else {
+      toast.success(ct.deleteSuccess)
+      fetchCustomers()
+    }
+  }
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault()
@@ -190,7 +204,7 @@ export default function CustomersTab() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  {[ct.name, ct.phone, ct.referralCode, ct.dateAdded].map(h => (
+                  {[ct.name, ct.phone, ct.referralCode, ct.dateAdded, ''].map(h => (
                     <th key={h} className="px-4 py-3 text-left font-medium text-gray-500">{h}</th>
                   ))}
                 </tr>
@@ -207,6 +221,26 @@ export default function CustomersTab() {
                     </td>
                     <td className="px-4 py-3 text-gray-500">
                       {new Date(c.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => handleDelete(c.id)}
+                        disabled={deleting === c.id}
+                        className="flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-700 hover:bg-red-50 px-2.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+                      >
+                        {deleting === c.id ? (
+                          <svg className="animate-spin w-3 h-3" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                        ) : (
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        )}
+                        {ct.delete}
+                      </button>
                     </td>
                   </tr>
                 ))}

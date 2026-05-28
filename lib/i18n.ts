@@ -37,6 +37,10 @@ export const translations = {
         noCustomers: 'No customers found',
         fetchError: 'Failed to load data. Please try again.',
         tryAgain: 'Try Again',
+        delete: 'Delete',
+        deleteConfirm: 'Are you sure you want to delete this customer?',
+        deleteFailed: 'Failed to delete customer',
+        deleteSuccess: 'Customer deleted!',
         addForm: {
           title: 'Add New Customer',
           namePlaceholder: 'Full name',
@@ -114,6 +118,10 @@ export const translations = {
         noCustomers: 'لا يوجد عملاء',
         fetchError: 'فشل تحميل البيانات. يرجى المحاولة مرة أخرى.',
         tryAgain: 'حاول مرة أخرى',
+        delete: 'حذف',
+        deleteConfirm: 'هل أنت متأكد أنك تريد حذف هذا العميل؟',
+        deleteFailed: 'فشل حذف العميل',
+        deleteSuccess: 'تم حذف العميل!',
         addForm: {
           title: 'إضافة عميل جديد',
           namePlaceholder: 'الاسم الكامل',
