@@ -14,14 +14,21 @@ export default function DashboardPage() {
   const router = useRouter()
   const { t, isRTL } = useLang()
   const [activeTab, setActiveTab] = useState(0)
-  const [mounted, setMounted] = useState(false)
+  const [authChecked, setAuthChecked] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-    if (!isLoggedIn()) router.replace('/login')
+    if (!isLoggedIn()) {
+      router.replace('/login')
+    } else {
+      setAuthChecked(true)
+    }
   }, [router])
 
-  if (!mounted) return null
+  if (!authChecked) return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="animate-spin w-8 h-8 border-4 border-[#1D9E75] border-t-transparent rounded-full" />
+    </div>
+  )
 
   const handleLogout = () => {
     logout()
