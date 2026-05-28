@@ -109,9 +109,9 @@ export default function CustomersTab() {
 
     setSubmitting(false)
     if (error) {
-      toast.error('Failed to add customer')
+      toast.error(ct.addFailed)
     } else {
-      toast.success('Customer added!')
+      toast.success(ct.addSuccess)
       setFormName('')
       setFormPhone('')
       setShowForm(false)
