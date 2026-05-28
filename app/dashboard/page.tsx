@@ -16,6 +16,7 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState(0)
   const [authChecked, setAuthChecked] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   useEffect(() => {
     if (!isLoggedIn()) {
@@ -35,10 +36,7 @@ export default function DashboardPage() {
 
   if (!authChecked) return null
 
-  const handleLogout = () => {
-    logout()
-    router.push('/login')
-  }
+  const handleLogout = () => setShowLogoutConfirm(true)
 
   const tabs = t.dashboard.tabs
   const tabComponents = [
@@ -50,6 +48,33 @@ export default function DashboardPage() {
 
   return (
     <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gray-50">
+      {/* Logout confirmation modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 space-y-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              {isRTL ? 'تأكيد تسجيل الخروج' : 'Confirm Logout'}
+            </h3>
+            <p className="text-sm text-gray-500">
+              {isRTL ? 'هل أنت متأكد أنك تريد تسجيل الخروج؟' : 'Are you sure you want to logout?'}
+            </p>
+            <div className="flex gap-3 pt-2">
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                {isRTL ? 'إلغاء' : 'Cancel'}
+              </button>
+              <button
+                onClick={() => { logout(); router.push('/login') }}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors"
+              >
+                {isRTL ? 'تسجيل الخروج' : 'Logout'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Top nav */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
