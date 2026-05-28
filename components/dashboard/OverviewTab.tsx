@@ -131,13 +131,15 @@ export default function OverviewTab() {
 }
 
 function StatusBadge({ status }: { status: string }) {
+  const { t } = useLang()
+  const cv = t.dashboard.confirmVisits
   return (
     <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
       status === 'confirmed'
         ? 'bg-green-100 text-green-700'
         : 'bg-yellow-100 text-yellow-700'
     }`}>
-      {status}
+      {status === 'confirmed' ? cv.confirmed : cv.pending}
     </span>
   )
 }
