@@ -196,7 +196,14 @@ export default function CustomersTab() {
                   disabled={submitting}
                   className="flex-1 bg-[#1D9E75] hover:bg-[#17845F] text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors disabled:opacity-60"
                 >
-                  {submitting ? '...' : ct.addForm.add}
+                  {submitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                    </span>
+                  ) : ct.addForm.add}
                 </button>
               </div>
             </form>
