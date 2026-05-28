@@ -35,6 +35,8 @@ export const translations = {
         referralCode: 'Referral Code',
         dateAdded: 'Date Added',
         noCustomers: 'No customers found',
+        fetchError: 'Failed to load data. Please try again.',
+        tryAgain: 'Try Again',
         addForm: {
           title: 'Add New Customer',
           namePlaceholder: 'Full name',
@@ -110,6 +112,8 @@ export const translations = {
         referralCode: 'رمز الإحالة',
         dateAdded: 'تاريخ الإضافة',
         noCustomers: 'لا يوجد عملاء',
+        fetchError: 'فشل تحميل البيانات. يرجى المحاولة مرة أخرى.',
+        tryAgain: 'حاول مرة أخرى',
         addForm: {
           title: 'إضافة عميل جديد',
           namePlaceholder: 'الاسم الكامل',

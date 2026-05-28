@@ -18,6 +18,7 @@ export default function CustomersTab() {
   const [customers, setCustomers] = useState<Customer[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [formName, setFormName] = useState('')
   const [formPhone, setFormPhone] = useState('')
@@ -27,8 +28,14 @@ export default function CustomersTab() {
 
   async function fetchCustomers() {
     setLoading(true)
-    const { data } = await supabase.from('customers').select('*').order('created_at', { ascending: false })
-    setCustomers(data || [])
+    setError(null)
+    const { data, error: sbError } = await supabase.from('customers').select('*').order('created_at', { ascending: false })
+    if (sbError || !data) {
+      setError(ct.fetchError)
+      setLoading(false)
+      return
+    }
+    setCustomers(data)
     setLoading(false)
   }
 
@@ -154,6 +161,25 @@ export default function CustomersTab() {
       )}
 
       {/* Table */}
+      {error ? (
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm">
+          <div className="flex flex-col items-center justify-center py-16 gap-4">
+            <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center">
+              <svg className="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <p className="text-sm text-gray-500">{error}</p>
+            <button
+              onClick={fetchCustomers}
+              className="px-4 py-2 bg-[#1D9E75] hover:bg-[#17845F] text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              {ct.tryAgain}
+            </button>
+          </div>
+        </div>
+      ) : (
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-8 text-center text-gray-400 text-sm">Loading...</div>
@@ -189,6 +215,7 @@ export default function CustomersTab() {
           </div>
         )}
       </div>
+      )}
     </div>
   )
 }
