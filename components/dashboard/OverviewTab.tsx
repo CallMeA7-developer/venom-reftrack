@@ -6,7 +6,7 @@ import { useLang } from '@/context/LanguageContext'
 
 type ReferrerStat = { name: string; count: number }
 
-export default function OverviewTab() {
+export default function OverviewTab({ onViewAll }: { onViewAll?: () => void }) {
   const { t } = useLang()
   const ov = t.dashboard.overview
   const [totalCustomers, setTotalCustomers] = useState(0)
@@ -125,7 +125,17 @@ export default function OverviewTab() {
 
         {/* Recent Activity */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">{ov.recentActivity}</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-gray-900">{ov.recentActivity}</h3>
+            {onViewAll && (
+              <button
+                onClick={onViewAll}
+                className="text-sm font-medium text-[#1D9E75] hover:underline"
+              >
+                {ov.viewAll}
+              </button>
+            )}
+          </div>
           {recentActivity.length === 0 ? (
             <p className="text-gray-400 text-sm">{ov.noActivity}</p>
           ) : (

@@ -24,6 +24,7 @@ export const translations = {
         referredBy: 'Referred by',
         noActivity: 'No recent activity',
         refresh: 'Refresh',
+        viewAll: 'View All',
       },
       customers: {
         search: 'Search customers...',
@@ -97,6 +98,7 @@ export const translations = {
         referredBy: 'تمت الإحالة بواسطة',
         noActivity: 'لا يوجد نشاط حديث',
         refresh: 'تحديث',
+        viewAll: 'عرض الكل',
       },
       customers: {
         search: 'البحث عن عملاء...',

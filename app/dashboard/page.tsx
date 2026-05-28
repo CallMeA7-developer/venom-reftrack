@@ -40,7 +40,7 @@ export default function DashboardPage() {
 
   const tabs = t.dashboard.tabs
   const tabComponents = [
-    <OverviewTab key="overview" />,
+    <OverviewTab key="overview" onViewAll={() => setActiveTab(3)} />,
     <CustomersTab key="customers" />,
     <GenerateLinkTab key="generate" />,
     <ConfirmVisitsTab key="confirm" />,
