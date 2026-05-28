@@ -17,7 +17,7 @@ export default function ConfirmVisitsTab() {
   async function fetchVisits() {
     setLoading(true)
     const { data } = await supabase
-      .from('referral_visits')
+      .from('visits')
       .select('*, customers(name)')
       .order('created_at', { ascending: false })
     setVisits(data || [])
@@ -27,7 +27,7 @@ export default function ConfirmVisitsTab() {
   async function confirmVisit(id: string) {
     setConfirming(id)
     const { error } = await supabase
-      .from('referral_visits')
+      .from('visits')
       .update({ status: 'confirmed' })
       .eq('id', id)
     setConfirming(null)

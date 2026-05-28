@@ -24,7 +24,7 @@ export default function OverviewTab() {
     setLoading(true)
     const [custRes, visitsRes] = await Promise.all([
       supabase.from('customers').select('*'),
-      supabase.from('referral_visits').select('*, customers(name)').order('created_at', { ascending: false }),
+      supabase.from('visits').select('*, customers(name)').order('created_at', { ascending: false }),
     ])
 
     const customers: Customer[] = custRes.data || []

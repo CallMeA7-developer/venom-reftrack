@@ -38,7 +38,7 @@ export default function VisitContent() {
     e.preventDefault()
     if (!customer) return
     setSubmitting(true)
-    const { error } = await supabase.from('referral_visits').insert({
+    const { error } = await supabase.from('visits').insert({
       visitor_name: visitorName.trim(),
       referrer_id: customer.id,
       status: 'pending',
