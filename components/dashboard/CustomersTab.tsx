@@ -302,7 +302,9 @@ export default function CustomersTab() {
       ) : (
       <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-gray-400 text-sm">Loading...</div>
+          <div className="p-8 flex items-center justify-center">
+            <div className="animate-spin w-6 h-6 border-4 border-[#1D9E75] border-t-transparent rounded-full" />
+          </div>
         ) : filtered.length === 0 ? (
           <div className="p-8 text-center text-gray-400 text-sm">{ct.noCustomers}</div>
         ) : (
