@@ -23,6 +23,7 @@ export const translations = {
         recentActivity: 'Recent Activity',
         referredBy: 'Referred by',
         noActivity: 'No recent activity',
+        refresh: 'Refresh',
       },
       customers: {
         search: 'Search customers...',
@@ -95,6 +96,7 @@ export const translations = {
         recentActivity: 'النشاط الأخير',
         referredBy: 'تمت الإحالة بواسطة',
         noActivity: 'لا يوجد نشاط حديث',
+        refresh: 'تحديث',
       },
       customers: {
         search: 'البحث عن عملاء...',
